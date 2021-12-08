@@ -6,7 +6,7 @@
 
 public with sharing class FlowMap {
 
-    @InvocableMethod
+    @InvocableMethod(Label='Map a value' ConfigurationEditor='c-flow-map-editor')
     public static List<String> get(List<Request> keys) {
         List<String> results = new List<String>();
 
@@ -16,7 +16,7 @@ public with sharing class FlowMap {
 
     public class Request {
         @InvocableVariable
-        public String key;
+        public String thisKey;
         @InvocableVariable
         public List<KeyValue> keyValuePairs;
     }
