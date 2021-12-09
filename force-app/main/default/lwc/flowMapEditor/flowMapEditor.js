@@ -28,8 +28,7 @@ export default class FlowMapEditor extends LightningElement {
 
     get keyValuePairs() {
         const param = this.inputVariables.find(({ name }) => name === 'keyValuePairs');
-        return param != null ? param.value : [];
-//        return param && JSON.parse(param.value);
+        return param != null ? JSON.parse(param.value) : [];
     }
 
     handleThisKeyChange(event) {
@@ -37,7 +36,8 @@ export default class FlowMapEditor extends LightningElement {
     }
 
     handleKeyValuePairsChange(event) {
-        this.handleChange(event, 'keyValuePairs', 'List');
+        event.detail.value = JSON.stringify(event.detail.value);
+        this.handleChange(event, 'keyValuePairs', 'String');
     }
 
     handleKeyValueInputChange(event) {
@@ -68,11 +68,7 @@ export default class FlowMapEditor extends LightningElement {
     }
 
     addKeyValuePair() {
-        // let keyValuePairs = this.inputVariables.find(({ name }) => name === 'keyValuePairs');
-        // const newKeyValuePairs = keyValuePairs != null ? [...keyValuePairs.value, {key: '', value: ''}] : [{key: '', value: ''}];
         const newKeyValuePairs = [...this.keyValuePairs, {key: '', value: ''}];
-
         this.handleKeyValuePairsChange({detail : { value: newKeyValuePairs} });
-        return newKeyValuePairs;
     }
 }
