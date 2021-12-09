@@ -27,7 +27,7 @@ export default class FlowMapEditor extends LightningElement {
     }
 
     get keyValuePairs() {
-        const param = this.inputVariables.find(({ name }) => name === 'keyValuePairs');
+        const param = this.inputVariables.find(({ name }) => name === 'keyValuePairsString');
         return param != null ? JSON.parse(param.value) : [];
     }
 
@@ -37,7 +37,7 @@ export default class FlowMapEditor extends LightningElement {
 
     handleKeyValuePairsChange(event) {
         event.detail.value = JSON.stringify(event.detail.value);
-        this.handleChange(event, 'keyValuePairs', 'String');
+        this.handleChange(event, 'keyValuePairsString', 'String');
     }
 
     handleKeyValueInputChange(event) {
