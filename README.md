@@ -82,3 +82,6 @@ the files in the following directories to your org:
 
 Similarly, the Custom Metadata solution can also be installed as individual files found in the [cmdtFlowMap](force-app/main/default/cmdtFlowMap)
 directory.
+
+## License
+MIT, see [LICENSE](LICENSE)
