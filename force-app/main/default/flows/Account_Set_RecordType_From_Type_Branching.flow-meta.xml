@@ -147,8 +147,8 @@
             <label>Channel Partner</label>
         </rules>
     </decisions>
-    <interviewLabel>Account Set RecordType From Type (branching) {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Account Set RecordType From Type (branching)</label>
+    <interviewLabel>Account Set RecordType From Type (Branching) {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account Set RecordType From Type (Branching)</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -207,7 +207,7 @@
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>RecordTypeDeveloperName</name>
         <dataType>String</dataType>

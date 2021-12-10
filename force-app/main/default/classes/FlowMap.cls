@@ -1,12 +1,13 @@
 /**
  * @author aidan@nebulaconsulting.co.uk
  * @date 08/12/2021
- * @description (if required)
+ * @description Maps value in Flow via a Lookup Table. The table is supplied as Request.keyValuePairsString. The value
+ * to map is Request.thisKey. It is assumed that Request.keyValuePairsString is fixed across all bulkified values
  */
 
 public with sharing class FlowMap {
 
-    @InvocableMethod(Label='Map a value' ConfigurationEditor='c-flow-map-editor')
+    @InvocableMethod(Label='Map a Value' ConfigurationEditor='c-flow-map-editor')
     public static List<String> get(List<Request> requests) {
         List<String> results = new List<String>();
         Map<String, String> theMapping = getMapping(requests[0]);

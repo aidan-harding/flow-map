@@ -7,17 +7,39 @@ import { LightningElement, api } from 'lwc';
 
 export default class FlowMapEditor extends LightningElement {
 
+    columns = [
+        { label: 'Key', fieldName: 'key', editable: true, sortable: true  },
+        { label: 'Value', fieldName: 'value', editable: true, sortable: true },
+        {
+            type: 'action',
+            typeAttributes: { rowActions: [
+                    { label: 'Delete', name: 'delete' }
+                ] },
+        }
+    ];
+    draftValues = [];
+    defaultSortDirection = 'asc';
+    sortDirection = 'asc';
+    sortedBy;
+    errorMessage;
+
     @api
     inputVariables;
 
     @api validate() {
         const validity = [];
-        // if (!this.keyValue) {
-        //     validity.push({
-        //         key: 'keyValue',
-        //         errorString: 'Key Value is required.',
-        //     });
-        // }
+        this.errorMessage = null;
+
+        this.keyValuePairs.forEach(thisKeyValuePair => {
+            if(thisKeyValuePair.key == null || thisKeyValuePair.key === "") {
+                this.errorMessage = 'A key is required for every mapping row. You may delete rows using the action button.';
+                validity.push({
+                    key: 'keyValuePairsString',
+                    errorString: this.errorMessage,
+                });
+
+            }
+        })
         return validity;
     }
 
@@ -28,26 +50,36 @@ export default class FlowMapEditor extends LightningElement {
 
     get keyValuePairs() {
         const param = this.inputVariables.find(({ name }) => name === 'keyValuePairsString');
-        return param != null ? JSON.parse(param.value) : [];
+        const result = param != null ? JSON.parse(param.value) : [];
+        result.forEach((thisKeyValuePair, index) => thisKeyValuePair.id = index.toString());
+        return result;
+    }
+
+    handleTableSave(event) {
+        const newKeyValuePairs = this.keyValuePairs;
+        for (let i = 0; i < event.detail.draftValues.length; i++) {
+            const thisDraftValue = event.detail.draftValues[i];
+            const matchIndex = newKeyValuePairs.findIndex(thisKeyValuePair => thisKeyValuePair.id === thisDraftValue.id);
+            if(matchIndex >= 0) {
+                Object.assign(newKeyValuePairs[matchIndex], thisDraftValue);
+            }
+        }
+        this.draftValues = [];
+        this.handleKeyValuePairsChange(newKeyValuePairs);
+        if(this.errorMessage) {
+            this.validate();
+        }
     }
 
     handleThisKeyChange(event) {
-        this.handleChange(event, 'thisKey', 'String');
+        this.handleChange(event, 'thisKey');
     }
 
-    handleKeyValuePairsChange(event) {
-        event.detail.value = JSON.stringify(event.detail.value);
-        this.handleChange(event, 'keyValuePairsString', 'String');
+    handleKeyValuePairsChange(newKeyValuePairs) {
+        this.handleChange({detail : { value: JSON.stringify(newKeyValuePairs)} }, 'keyValuePairsString');
     }
 
-    handleKeyValueInputChange(event) {
-        const newKeyValuePairs = this.keyValuePairs.map(thisKeyValuePair => Object.assign({}, thisKeyValuePair));
-        newKeyValuePairs[event.target.dataset.index][event.target.name] = event.detail.value;
-
-        this.handleKeyValuePairsChange({detail : { value: newKeyValuePairs} });
-    }
-
-    handleChange(event, name, newValueDataType) {
+    handleChange(event, name) {
         if (event && event.detail) {
             const newValue = event.detail.value;
             const valueChangedEvent = new CustomEvent(
@@ -59,7 +91,7 @@ export default class FlowMapEditor extends LightningElement {
                     detail: {
                         name,
                         newValue,
-                        newValueDataType
+                        newValueDataType: 'String'
                     },
                 }
             );
@@ -67,8 +99,55 @@ export default class FlowMapEditor extends LightningElement {
         }
     }
 
+    handleRowAction(event) {
+        const actionName = event.detail.action.name;
+        const row = event.detail.row;
+        switch (actionName) {
+            case 'delete':
+                this.deleteRow(row);
+                break;
+            default:
+        }
+    }
+
+    deleteRow(row) {
+        let newKeyValuePairs = this.keyValuePairs;
+        const index = newKeyValuePairs.findIndex(thisKeyValuePair => thisKeyValuePair.id === row.id);
+        if (index >= 0) {
+            newKeyValuePairs = newKeyValuePairs
+                .slice(0, index)
+                .concat(newKeyValuePairs.slice(index + 1));
+            this.handleKeyValuePairsChange(newKeyValuePairs);
+        }
+    }
+
     addKeyValuePair() {
-        const newKeyValuePairs = [...this.keyValuePairs, {key: '', value: ''}];
-        this.handleKeyValuePairsChange({detail : { value: newKeyValuePairs} });
+        this.handleKeyValuePairsChange([...this.keyValuePairs, {key: '', value: ''}]);
+    }
+
+    sortBy(field, reverse, primer) {
+        const key = primer
+            ? function (x) {
+                return primer(x[field]);
+            }
+            : function (x) {
+                return x[field];
+            };
+
+        return function (a, b) {
+            a = key(a);
+            b = key(b);
+            return reverse * ((a > b) - (b > a));
+        };
+    }
+
+    handleSort(event) {
+        const { fieldName: sortedBy, sortDirection } = event.detail;
+        const newKeyValuePairs = this.keyValuePairs;
+
+        newKeyValuePairs.sort(this.sortBy(sortedBy, sortDirection === 'asc' ? -1 : 1));
+        this.handleKeyValuePairsChange(newKeyValuePairs);
+        this.sortDirection = sortDirection;
+        this.sortedBy = sortedBy;
     }
 }

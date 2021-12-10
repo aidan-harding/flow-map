@@ -1,21 +1,21 @@
 <!--
  - @author aidan@nebulaconsulting.co.uk
  - @date 08/12/2021
- - @description (if required)
+ - @description Property editor for using FlowMap.get() in Flow Builder
  -->
 
 <!-- Flow Map Editor -->
 <template>
     <div class="slds-m-bottom_x-small">
         <h2 class="slds-text-heading_medium slds-p-around_xx-small lgc-bg-inverse">
-            Value to Map
+            Input Value to Map
         </h2>
 
         <div class="slds-p-around_xx-small lgc-bg">
             <lightning-input
                     type="text"
-                    label="This Key"
-                    placeholder="Enter a variable for this key..."
+                    label="Input Value"
+                    placeholder="Enter a variable to map..."
                     value={thisKey}
                     onchange={handleThisKeyChange}
                     required="true"
@@ -26,33 +26,25 @@
 
     <div class="slds-m-bottom_x-small">
         <h2 class="slds-text-heading_medium slds-p-around_xx-small lgc-bg-inverse">
-            Key Value Pairs
+            Mapping Table
         </h2>
 
-        <template for:each={keyValuePairs} for:item="thisPair" for:index="pairIndex">
-            <div class="slds-p-around_xx-small lgc-bg" key={thisPair.key}>
-                <lightning-input
-                        type="text"
-                        label="Key"
-                        name="key"
-                        value={thisPair.key}
-                        required="true"
-                        data-index={pairIndex}
-                        onchange={handleKeyValueInputChange}
-                >
-                </lightning-input>
-                <lightning-input
-                        type="text"
-                        label="Value"
-                        name="value"
-                        value={thisPair.value}
-                        data-index={pairIndex}
-                        onchange={handleKeyValueInputChange}
-                >
-                </lightning-input>
+        <lightning-datatable
+                key-field="id"
+                data={keyValuePairs}
+                draft-values={draftValues}
+                columns={columns}
+                hide-checkbox-column="true"
+                show-row-number-column="false"
+                onsave={handleTableSave}
+                default-sort-direction={defaultSortDirection}
+                sorted-direction={sortDirection}
+                sorted-by={sortedBy}
+                onsort={handleSort}
+                onrowaction={handleRowAction}
+        ></lightning-datatable>
+        <div class="slds-text-color_error">{errorMessage}</div>
 
-            </div>
-        </template>
         <lightning-button icon-name="utility-add" label="Add Key/Value Pair" onclick={addKeyValuePair}>
         </lightning-button>
 

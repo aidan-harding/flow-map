@@ -14,7 +14,7 @@
         <inputParameters>
             <name>keyValuePairsString</name>
             <value>
-                <stringValue>[{&quot;key&quot;:&quot;Customer - Channel&quot;,&quot;value&quot;:&quot;Customer&quot;},{&quot;key&quot;:&quot;Technology Partner&quot;,&quot;value&quot;:&quot;Partner&quot;}]</stringValue>
+                <stringValue>[{&quot;key&quot;:&quot;Customer - Channel&quot;,&quot;value&quot;:&quot;Customer&quot;,&quot;id&quot;:&quot;0&quot;},{&quot;key&quot;:&quot;Technology Partner&quot;,&quot;value&quot;:&quot;Partner&quot;,&quot;id&quot;:&quot;1&quot;},{&quot;key&quot;:&quot;Channel Partner / Reseller&quot;,&quot;value&quot;:&quot;Channel_Partner&quot;,&quot;id&quot;:&quot;2&quot;},{&quot;key&quot;:&quot;Customer - Direct&quot;,&quot;value&quot;:&quot;Customer&quot;,&quot;id&quot;:&quot;3&quot;},{&quot;key&quot;:&quot;Installation Partner&quot;,&quot;value&quot;:&quot;Partner&quot;,&quot;id&quot;:&quot;4&quot;},{&quot;key&quot;:&quot;Other&quot;,&quot;value&quot;:&quot;Other&quot;,&quot;id&quot;:&quot;5&quot;}]</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -98,5 +98,5 @@
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
 </Flow>
