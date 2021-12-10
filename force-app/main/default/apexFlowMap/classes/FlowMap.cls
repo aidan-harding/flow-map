@@ -5,15 +5,17 @@
  * to map is Request.thisKey. It is assumed that Request.keyValuePairsString is fixed across all bulkified values
  */
 
-public with sharing class FlowMap {
+public inherited sharing class FlowMap {
 
     @InvocableMethod(Label='Map a Value' ConfigurationEditor='c-flow-map-editor')
     public static List<String> get(List<Request> requests) {
         List<String> results = new List<String>();
+
         Map<String, String> theMapping = getMapping(requests[0]);
         for(Request thisRequest : requests) {
             results.add(theMapping.get(thisRequest.thisKey));
         }
+
         return  results;
     }
 
@@ -28,16 +30,38 @@ public with sharing class FlowMap {
 
 
     public class Request {
+
         @InvocableVariable
         public String thisKey;
+
         @InvocableVariable
         public String keyValuePairsString; // Serialised List<KeyValue>
+
+        @SuppressWarnings('PMD.EmptyStatementBlock') // Default constructor is required to be used in Flow
+        public Request() {
+        }
+
+        public Request(String thisKey, String keyValuePairsString) {
+            this.thisKey = thisKey;
+            this.keyValuePairsString = keyValuePairsString;
+        }
     }
 
     public class KeyValue {
+
         @InvocableVariable
         public String key;
+
         @InvocableVariable
         public String value;
+
+        @SuppressWarnings('PMD.EmptyStatementBlock') // Default constructor is required to be used in Flow
+        public KeyValue() {
+        }
+
+        public KeyValue(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }
