@@ -38,6 +38,9 @@
                 <elementReference>Get_RecordType.Id</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Update_Account</targetReference>
+        </connector>
     </assignments>
     <interviewLabel>Account Set RecordType From Type (Apex) {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Account Set RecordType From Type (Apex)</label>
@@ -88,6 +91,19 @@
         <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Update_Account</name>
+        <label>Update Account</label>
+        <locationX>176</locationX>
+        <locationY>695</locationY>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_RecordType.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
