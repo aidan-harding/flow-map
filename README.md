@@ -1,18 +1,37 @@
-# Salesforce DX Project: Next Steps
+# "Map a Value" for Flow
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+Maps are a familiar data structure for Apex developers, but they also offer benefits in Flow. They can replace 
+many-branched decision nodes with a single node.
 
-## How Do You Plan to Deploy Your Changes?
+This scenario occurs in many places. For example, sending an email where the template to use is based on the value of a
+picklist field. Or creating a Case from a trigger where the Record Type of the Case depends on a field from the trigger.
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+## A simple example: Account Record Type from Type
 
-## Configure Your Salesforce DX Project
+To demonstrate, we use a toy example of setting an Account's Record Type based on the Type 
+(a standard picklist field on Account).
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+### Using a decision node
 
-## Read All About It
+First, a conventional approach with a decision node:
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+![Branching Flow](images/branching_flow.png)
+
+As you would expect, this Flow checks `Type` in a decision node and assigns to a variable with the corresponding 
+Account Record Type Developer Name. It then queries for the Record Type Id and assigns that onto the Account.
+
+### Using a map node
+
+That's fine, but it could be simplified with a Map:
+
+![Map Flow](images/map_flow.png)
+
+In this version, the mapping from `Type` to the Record Type Developer Name is a single step. That's great, let's take 
+a look at the configuration of that magic node:
+
+![Map Flow Configuration](images/map_flow_config.png)
+
+The configuration needs two things:
+
+* The name of the input variable
+* A table of mapping data
