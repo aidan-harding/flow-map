@@ -6,6 +6,8 @@ some many-branched decision nodes with a single node.
 This scenario occurs in many places. For example, sending an email where the email template to use is based on the value of a
 picklist field. Or assigning record ownership based on the value in a field. 
 
+See also [Maps in Flow](https://nebulaconsulting.co.uk/insights/maps-in-flow/) on our blog. 
+
 ## A simple example: Account Record Type from Type
 
 To demonstrate, we use a toy example of setting an Account's Record Type based on the Type 
